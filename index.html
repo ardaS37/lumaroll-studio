@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="tr">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self' blob:; connect-src 'self' ws://127.0.0.1:*"><title>Luma • Piano Studio</title></head>
+<link rel="stylesheet" href="/src/studio.css">
+<body>
+  <header><a class="brand" href="#"><span class="brand-icon">Ⅲ</span> luma<span class="brand-tag">PIANO STUDIO</span></a><div class="header-right"><span class="status-dot"></span> Yerel çalışma alanı <button id="export" class="primary">↗ Video kaydet</button></div></header>
+  <main>
+    <section class="workspace">
+      <div class="workspace-heading"><div><div class="eyebrow">SESİN GÖRÜNÜR HALİ</div><h1>Müziğe ışık ver.</h1></div><button id="clean">⛶ Sinema modu</button></div>
+      <div class="stage" id="stage"><canvas id="visualizer" aria-label="Piyano nota ve parçacık görselleştirmesi"></canvas><div class="stage-label"><span class="status-dot"></span> CANLI ÖNİZLEME</div><div class="stage-bottom">LUMA / VISUAL SESSION <span>88 KEYS</span></div></div>
+      <div class="transport"><div class="transport-top"><div class="track-icon">♫</div><div class="track-info"><strong id="track-title">Midnight Motion</strong><span id="track-detail">Demo beste · 88 tuş piyano</span></div><button id="restart" title="Başa dön">↺</button><button id="play" class="play" aria-label="Oynat">▶</button><span id="time">0:00 / 0:48</span></div><input id="seek" aria-label="Oynatma konumu" type="range" min="0" max="48" step="0.01" value="0"><div class="transport-bottom"><span>SPACE <span class="muted">oynat / duraklat</span></span><label class="audio-label"><input id="audio" type="checkbox" checked> Piyano sesi</label><span id="fps">60 FPS</span></div></div>
+      <div class="hint"><span>✦</span><div><strong>Kendi melodin, kendi atmosferin.</strong><p>Bir MIDI dosyası bırak veya demoyu oynatarak ışıkları keşfet.</p></div><button id="demo">Demoyu yükle ↗</button></div>
+    </section>
+    <aside><div class="panel-heading"><h2>Görsel stüdyo</h2><span>01</span></div><div class="panel-section"><div class="section-label">KAYNAK</div><button class="upload" id="upload"><span>＋</span><strong>MIDI dosyası aç</strong><small>.mid veya .midi · sürükle ve bırak</small></button><input id="file" type="file" accept=".mid,.midi" hidden></div>
+      <div class="panel-section"><div class="section-label">ATMOSFER <span>3 PRESET</span></div><div class="presets"><button class="preset active" data-preset="aurora"><i class="aurora"></i>Aurora</button><button class="preset" data-preset="ember"><i class="ember"></i>Ember</button><button class="preset" data-preset="violet"><i class="violet"></i>Nebula</button></div></div>
+      <div class="panel-section"><div class="section-label">IŞIK & HAREKET</div><label class="slider-label">Parlama <output id="glow-value">75%</output><input id="glow" type="range" min="0" max="100" value="75"></label><label class="slider-label">Parçacık yoğunluğu <output id="particles-value">65%</output><input id="particles" type="range" min="0" max="100" value="65"></label><label class="slider-label">Duman <output id="smoke-value">50%</output><input id="smoke" type="range" min="0" max="100" value="50"></label><label class="slider-label">Nota akış hızı <output id="speed-value">1.0×</output><input id="speed" type="range" min="0.5" max="2" step="0.1" value="1"></label></div>
+      <div class="panel-section"><div class="section-label">SAHNE</div><label class="toggle-row">Klavye <input id="keyboard" type="checkbox" checked></label><label class="toggle-row">Nota ışık izleri <input id="trails" type="checkbox" checked></label><label class="toggle-row">Arka plan yıldızları <input id="stars" type="checkbox" checked></label></div>
+      <div class="output-note"><span>↗</span><div><strong>Temiz video çıktısı</strong><p>Yalnızca sahne kaydedilir.<br>WebM · 60 FPS hedef · piyano sesi</p></div></div>
+    </aside>
+  </main><div id="toast" role="status"></div><script type="module" src="/src/main.js"></script>
+</body></html>

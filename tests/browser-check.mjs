@@ -1,0 +1,40 @@
+import { chromium } from '@playwright/test';
+import midiPackage from '@tonejs/midi';
+const { Midi } = midiPackage;
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+const browser=await chromium.launch({channel:'msedge',headless:true});
+const page=await browser.newPage({viewport:{width:1440,height:1000},acceptDownloads:true});
+const errors=[];page.on('pageerror',e=>errors.push(e.message));
+try{
+ await page.goto('http://127.0.0.1:5174');
+ assert.equal(await page.locator('main').evaluate(el=>getComputedStyle(el).display),'grid');
+ await page.locator('#play').click();
+ await page.waitForTimeout(2200);
+ assert.match(await page.locator('#time').textContent(),/0:02/);
+ await page.locator('[data-preset="violet"]').click();
+ assert.match(await page.locator('[data-preset="violet"]').getAttribute('class'),/active/);
+ await fs.mkdir('test-results',{recursive:true});
+ await page.screenshot({path:'test-results/studio.png'});
+ await page.locator('#play').click();
+ const frozen=await page.locator('#seek').inputValue();await page.waitForTimeout(200);assert.equal(await page.locator('#seek').inputValue(),frozen);
+ await page.locator('#smoke').fill('20');
+ await page.locator('#smoke').dispatchEvent('change');
+ await page.locator('#stars').uncheck();
+ await page.reload();
+ assert.match(await page.locator('[data-preset="violet"]').getAttribute('class'),/active/);
+ assert.equal(await page.locator('#smoke').inputValue(),'20');
+ assert.equal(await page.locator('#smoke-value').textContent(),'20%');
+ assert.equal(await page.locator('#stars').isChecked(),false);
+ const midi=new Midi();midi.addTrack().addNote({midi:60,time:0,duration:.6,velocity:.7}).addNote({midi:64,time:.5,duration:.6,velocity:.7})
+   .addCC({number:64,time:0,value:1}).addCC({number:64,time:2,value:0});
+ await page.locator('#file').setInputFiles({name:'check.mid',mimeType:'audio/midi',buffer:Buffer.from(midi.toArray())});
+ await page.waitForFunction(()=>document.getElementById('track-title').textContent==='check');
+ assert.equal(Number(await page.locator('#seek').getAttribute('max')),2.5);
+ const downloadPromise=page.waitForEvent('download',{timeout:15000});
+ await page.locator('#export').click();
+ const download=await downloadPromise;await download.saveAs('test-results/check.webm');
+ assert.ok((await fs.stat('test-results/check.webm')).size>1000);
+ assert.deepEqual(errors,[]);
+ console.log('PASS: playback, pause, persistent settings, sustain MIDI import, completed WebM export, no runtime errors.');
+}finally{await browser.close();}
