@@ -1,4 +1,6 @@
-# Luma Piano Studio
+# LumaRoll Studio
+
+> Work in progress.
 
 An experimental Electron music-visualization studio inspired by piano-roll visualizers. It renders MIDI notes across an 88-key piano with animated lighting, color palettes, particles, and recording controls.
 
@@ -20,4 +22,4 @@ npm run dev
 
 Run the desktop build with `npm start`, create a production web build with `npm run build`, and run the automated tests with `npm test`.
 
-This is a prototype. Live MIDI input, sampled concert piano, pedal interpretation, MP4 export, and offline frame rendering are not currently included.
+This is a work-in-progress prototype. Live MIDI input, sampled concert piano, pedal interpretation, MP4 export, and offline frame rendering are not currently included.
